@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import dotenv from "dotenv";
 import {expressExtended} from "@nerisma/express-extended";
+import cors from "cors";
 
 dotenv.config();
 import {logger} from "./logger/Logger";
@@ -8,6 +9,7 @@ import {setupControllers, setupDatasource, setupMiddlewares} from "./setup";
 
 async function server() {
     const app = expressExtended();
+    app.use(cors());
 
     await setupDatasource(app);
     setupMiddlewares(app);

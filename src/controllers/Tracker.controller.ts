@@ -8,13 +8,13 @@ export class TrackerController {
     constructor(private readonly trackerService: TrackerService) {
     }
 
-    @Get('/discover')
-    public async discover(req: Request, res: Response) {
+    @Get('/scan')
+    public async scan(req: Request, res: Response) {
         if (!req.query.url) {
             return res.status(400).json({message: 'URL is required'});
         }
 
-        const price = await this.trackerService.discover(req.query.url as string);
+        const price = await this.trackerService.scan(req.query.url as string);
         res.status(200).json(price);
     }
 

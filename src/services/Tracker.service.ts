@@ -3,7 +3,7 @@ import puppeteer, {Browser} from "puppeteer";
 import puppeteerExtra from 'puppeteer-extra';
 import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 import {logger} from "../logger/Logger";
-import {AmazonDiscovery} from "../models/AmazonDiscovery.model";
+import {Product} from "../models/Product.model";
 
 @Dependency()
 export class TrackerService {
@@ -20,7 +20,7 @@ export class TrackerService {
     }
 
 
-    public async discover(url: string): Promise<AmazonDiscovery> {
+    public async scan(url: string): Promise<Product> {
         if (!this.browser) {
             throw new Error('Browser is not ready');
         }
@@ -35,8 +35,8 @@ export class TrackerService {
         const productNameElem = await page.$('#productTitle');
 
         return {
-            productName: await productNameElem?.evaluate((el) => el.textContent),
-            productPrice: await productPriceElem?.evaluate((el) => el.textContent)
+            name: await productNameElem?.evaluate((el) => el.textContent),
+            price: await productPriceElem?.evaluate((el) => el.textContent)
         };
     }
 
