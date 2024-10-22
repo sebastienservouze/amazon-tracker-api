@@ -5,10 +5,10 @@ import {Column, Entity, ManyToOne} from "typeorm";
 @Entity()
 export class PriceChange extends MetadataEntity {
 
-    @Column()
+    @Column("decimal", {precision: 10, scale: 2})
     oldPrice!: number;
 
-    @Column()
+    @Column("decimal", {precision: 10, scale: 2})
     newPrice!: number;
 
     @ManyToOne(() => Product, product => product.priceChanges)

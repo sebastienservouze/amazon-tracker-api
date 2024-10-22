@@ -1,4 +1,4 @@
-import {Controller, Get} from "@nerisma/express-extended";
+import {Controller, Get, Post} from "@nerisma/express-extended";
 import {Request, Response} from "express";
 import {ScrappingService} from "../services/Scrapping.service";
 import {ProductService} from "../services/Product.service";
@@ -27,14 +27,14 @@ export class TrackerController {
         }
     }
 
-    @Get('/track')
+    @Post('/track')
     public async track(req: Request, res: Response): Promise<Product[] | any> {
         if (!req.body) {
             return res.status(400)
                       .json({message: 'Body is required'});
         }
 
-        if (!Array.isArray(req.body) || !req.body.every((product) => product instanceof ProductDiscovery)) {
+        if (!Array.isArray(req.body)) {
             return res.status(400)
                       .json({message: 'Invalid body'});
         }
@@ -76,7 +76,6 @@ export class TrackerController {
         const priceChange = new PriceChange();
         priceChange.oldPrice = product.price!;
         priceChange.newPrice = product.price!;
-        priceChange.product = newProduct;
 
         newProduct.priceChanges = [priceChange];
 
