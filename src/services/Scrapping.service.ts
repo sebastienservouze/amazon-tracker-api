@@ -78,7 +78,9 @@ export class ScrappingService {
             throw new Error('Price not found');
         }
 
-        productPriceStr = productPriceStr.replace(',', '.').match(/\d+(?:\.\d{1,2})?/)[0];
+        productPriceStr = productPriceStr.replace(/\s/g, "")
+                                         .replace(',', '.')
+                                         .match(/\d+(?:\.\d{1,2})?/)[0];
 
         return parseFloat(productPriceStr);
     }
@@ -109,7 +111,9 @@ export class ScrappingService {
             const priceElem = await el.$('.twisterSwatchPrice');
             let price = undefined;
             if (priceElem) {
-                price = parseFloat(await el.$eval('.twisterSwatchPrice', (el: any) => el.textContent.replace(',', '.').match(/\d+(?:\.\d{1,2})?/)[0]));
+                price = parseFloat(await el.$eval('.twisterSwatchPrice', (el: any) => el.textContent.replace(',', '.')
+                                                                                                    .replace(/\s/g, "")
+                                                                                                    .match(/\d+(?:\.\d{1,2})?/)[0]));
             }
             const url: string = page.url().substring(0, page.url().indexOf('/dp/')) + `/dp/${amazonId}`;
 

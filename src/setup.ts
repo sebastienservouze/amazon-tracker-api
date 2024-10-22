@@ -5,6 +5,7 @@ import {LoggerMiddleware} from "./middleware/Logger.middleware";
 import {AuthController} from "./controllers/Auth.controller";
 import {Datasource} from "./db/Datasource";
 import {TrackerController} from "./controllers/Tracker.controller";
+import {ProductController} from "./controllers/Product.controller";
 
 export async function setupDatasource(app: express.Application) {
     const datasource: DataSource = await app.useDataSource(Datasource.options);
@@ -23,6 +24,7 @@ export function setupControllers(app: express.Application) {
     const controllers = [
         AuthController,
         TrackerController,
+        ProductController,
     ];
 
     const endpoints = app.useControllers(controllers);

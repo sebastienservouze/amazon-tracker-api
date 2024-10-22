@@ -17,6 +17,6 @@ export class Product extends MetadataEntity {
 
     /* Relations */
 
-    @OneToMany(() => PriceChange, priceChange => priceChange.product, {cascade: true})
+    @OneToMany(() => PriceChange, priceChange => priceChange.product, {cascade: true, eager: true})
     priceChanges!: PriceChange[];
 }
