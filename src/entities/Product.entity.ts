@@ -1,6 +1,6 @@
 import {MetadataEntity} from "@nerisma/express-extended";
-import {Column, Entity, Index, JoinTable, ManyToMany, OneToOne} from "typeorm";
-import {Tracker} from "./Tracker.entity";
+import {Column, Entity, Index, OneToMany} from "typeorm";
+import {PriceChange} from "./PriceChange.entity";
 
 @Entity()
 export class Product extends MetadataEntity {
@@ -17,7 +17,6 @@ export class Product extends MetadataEntity {
 
     /* Relations */
 
-    @OneToOne(() => Tracker, tracker => tracker.product)
-    @JoinTable()
-    tracker?: Tracker;
+    @OneToMany(() => PriceChange, priceChange => priceChange.product, {cascade: true})
+    priceChanges!: PriceChange[];
 }

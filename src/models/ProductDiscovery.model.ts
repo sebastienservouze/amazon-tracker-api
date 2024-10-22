@@ -1,7 +1,6 @@
-export interface ProductDiscovery {
-    amazonId: string;
-    url: string;
-    name: string;
-    price: number;
-    variants?: ProductDiscovery[];
+export class ProductDiscovery {
+    amazonId: string = '';
+    url: string = '';
+    name: string = '';
+    price?: number;
 }

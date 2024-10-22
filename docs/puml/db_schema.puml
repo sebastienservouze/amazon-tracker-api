@@ -17,23 +17,14 @@ entity "Product" {
     + name: string
 }
 
-entity "Tracker" {
-    + id: int
-    --
-    + user_id: int
-    + product_id: int
-}
-
-entity "Scan" {
+entity "PriceChange" {
     + id: int
     --
     + tracker_id: int
     + price: float
 }
 
-User }|-- Tracker
-Product }|-- Tracker
-Tracker }|-- Scan
-Product }|-- ProductProduct
+User ||--o{ Product
+Product ||--o{ PriceChange
 
 @enduml

@@ -19,7 +19,7 @@ export class ScrappingService {
                  });
     }
 
-    public async discoverProduct(url: string): Promise<ProductDiscovery> {
+    public async discover(url: string): Promise<ProductDiscovery[]> {
         if (!this.browser) {
             throw new Error('Browser is not ready');
         }
@@ -30,23 +30,20 @@ export class ScrappingService {
             'window.performance.timing.loadEventEnd - window.performance.timing.navigationStart >= 500'
         );
 
+        const discovery = new ProductDiscovery();
+        discovery.url = url;
+        discovery.amazonId = await this.getProductAmazonId(page);
+        discovery.name = await this.getProductName(page);
+        discovery.price = await this.getProductPrice(page);
 
-        const amazonId = await this.getProductAmazonId(page);
-        const name = await this.getProductName(page);
-        const price = await this.getProductPrice(page);
-        const variants = await this.getProductVariants(page, amazonId);
-
-        const discoveredProduct = {
-            amazonId,
-            url,
-            name,
-            price,
-            variants,
-        };
+        // Check if product has variants
+        if (await page.$('#variation_style_name')) {
+            return [discovery, ...await this.getProductVariants(page, discovery.amazonId)];
+        }
 
         page?.close();
 
-        return discoveredProduct;
+        return [discovery];
     }
 
     private async getProductAmazonId(page: Page): Promise<string> {
@@ -59,7 +56,15 @@ export class ScrappingService {
     }
 
     private async getProductName(page: Page): Promise<string> {
-        let productName = await page.$eval('#productTitle', (el) => el.textContent);
+        let productName;
+
+        try {
+            productName = await page.$eval('#variation_style_name .selection', (el) => el.textContent);
+        }
+        catch (e) {
+            productName = await page.$eval('#productTitle', (el) => el.textContent);
+        }
+
         if (!productName) {
             throw new Error('Product name not found');
         }
@@ -73,7 +78,7 @@ export class ScrappingService {
             throw new Error('Price not found');
         }
 
-        productPriceStr = productPriceStr.match(/\d+(?:\.\d{1,2})?/)[0];
+        productPriceStr = productPriceStr.replace(',', '.').match(/\d+(?:\.\d{1,2})?/)[0];
 
         return parseFloat(productPriceStr);
     }
@@ -86,13 +91,26 @@ export class ScrappingService {
 
         const variants: ProductDiscovery[] = [];
         for (const el of liElems) {
-            const amazonId: string = await page.evaluate((el: any) => el.getAttribute('data-csa-c-item-id'), el);
+            let amazonId: string = await page.evaluate((el: any) => el.getAttribute('data-csa-c-item-id'), el);
+            if (!amazonId) {
+                const dpUrl = await page.evaluate((el: any) => el.getAttribute('data-dp-url'), el);
+                if (dpUrl) {
+                    const urlFragments = dpUrl.split('/');
+                    amazonId = urlFragments[2];
+                }
+            }
+
             if (amazonId === baseProductAmazonId) {
                 continue;
             }
 
             const name: string = await el.$eval('p', (el: any) => el.textContent);
-            const price: number = parseFloat(await el.$eval('.twisterSwatchPrice', (el: any) => el.textContent.match(/\d+(?:\.\d{1,2})?/)[0]));
+
+            const priceElem = await el.$('.twisterSwatchPrice');
+            let price = undefined;
+            if (priceElem) {
+                price = parseFloat(await el.$eval('.twisterSwatchPrice', (el: any) => el.textContent.replace(',', '.').match(/\d+(?:\.\d{1,2})?/)[0]));
+            }
             const url: string = page.url().substring(0, page.url().indexOf('/dp/')) + `/dp/${amazonId}`;
 
             variants.push({

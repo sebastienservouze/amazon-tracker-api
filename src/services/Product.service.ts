@@ -9,4 +9,8 @@ export class ProductService extends CrudService<Product> {
     constructor(datasource: DataSource) {
         super(datasource, Product);
     }
+
+    async createMany(products: Product[]): Promise<Product[]> {
+        return this.repository?.save(products) ?? [];
+    }
 }

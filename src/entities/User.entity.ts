@@ -1,7 +1,7 @@
-import {Column, Entity, OneToMany} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany} from "typeorm";
 import {AuthRole} from "../enums/AuthRole.enum";
 import {MetadataEntity} from "@nerisma/express-extended";
-import {Tracker} from "./Tracker.entity";
+import {Product} from "./Product.entity";
 
 
 @Entity()
@@ -18,6 +18,7 @@ export class User extends MetadataEntity {
 
     /* Relations */
 
-    @OneToMany(() => Tracker, tracker => tracker.user)
-    trackers?: Tracker[];
+    @ManyToMany(() => Product)
+    @JoinTable()
+    products?: Product[];
 }
