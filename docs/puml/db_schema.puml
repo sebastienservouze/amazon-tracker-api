@@ -13,6 +13,7 @@ entity "Product" {
     + id: int
     --
     + amazon_id: string
+    + url: string
     + name: string
 }
 
@@ -33,5 +34,6 @@ entity "Scan" {
 User }|-- Tracker
 Product }|-- Tracker
 Tracker }|-- Scan
+Product }|-- ProductProduct
 
 @enduml

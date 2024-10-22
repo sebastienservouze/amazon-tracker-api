@@ -1,8 +1,8 @@
 import {MetadataEntity} from "@nerisma/express-extended";
-import {Column, Index, JoinTable, OneToMany, OneToOne} from "typeorm";
+import {Column, Entity, Index, JoinTable, ManyToMany, OneToOne} from "typeorm";
 import {Tracker} from "./Tracker.entity";
 
-
+@Entity()
 export class Product extends MetadataEntity {
 
     @Index({unique: true})
@@ -11,6 +11,9 @@ export class Product extends MetadataEntity {
 
     @Column()
     name!: string;
+
+    @Column()
+    url!: string;
 
     /* Relations */
 
