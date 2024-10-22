@@ -1,11 +1,11 @@
 import {Controller, Get} from "@nerisma/express-extended";
 import {Request, Response} from "express";
-import {TrackerService} from "../services/Tracker.service";
+import {AmazonService} from "../services/Amazon.service";
 
 @Controller('/tracker')
 export class TrackerController {
 
-    constructor(private readonly trackerService: TrackerService) {
+    constructor(private readonly trackerService: AmazonService) {
     }
 
     @Get('/scan')

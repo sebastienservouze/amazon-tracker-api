@@ -1,0 +1,37 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity "User" {
+    + id: int
+    --
+    + name: string
+    + password: string
+    + role: string
+}
+
+entity "Product" {
+    + id: int
+    --
+    + amazon_id: string
+    + name: string
+}
+
+entity "Tracker" {
+    + id: int
+    --
+    + user_id: int
+    + product_id: int
+}
+
+entity "Scan" {
+    + id: int
+    --
+    + tracker_id: int
+    + price: float
+}
+
+User }|-- Tracker
+Product }|-- Tracker
+Tracker }|-- Scan
+
+@enduml
