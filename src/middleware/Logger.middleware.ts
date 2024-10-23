@@ -9,10 +9,11 @@ export abstract class LoggerMiddleware {
 
     public static logResponse(req: Request, res: Response, next: NextFunction) {
         res.on('finish', () => {
-            logger.info(`[${req.method}] ${req.url} [${res.statusCode}]`);
-        });
-        res.on('error', (err) => {
-            logger.error(`[${req.method}] ${req.url} [${res.statusCode}] --> ${err.message}`);
+            if (res.statusCode === 200 || res.statusCode === 201) {
+                logger.info(`[${req.method}] ${req.url} [${res.statusCode}]`);
+            } else {
+                logger.error(`[${req.method}] ${req.url} [${res.statusCode}]`);
+            }
         });
         next();
     }
