@@ -2,13 +2,13 @@
 
 ## Description
 
-This is a simple API that allows you to track the price of a product on Amazon.
+Backend pour le projet Amazon Tracker.
 
 ## Installation
 
-1. Clone the repository
-2. Run `npm install`
-3. Create a `.env` file in the root directory and fill it with the following properties:
+1. Cloner le projet
+2. Installer les dépendances avec `npm install`
+3. Créer un fichier `.env` à la racine du projet avec les variables d'environnement suivantes:
 
 ```
 # Environment
@@ -32,30 +32,5 @@ JWT_REFRESH_SECRET=refresh_secret
 LOG_LEVEL=debug
 ```
 
-4. Run `npm run dev`
-5. The API will be running on `http://localhost:3000`
-
-## Endpoints
-
-### GET /discover?url={url}
-
-This endpoint will return informations about the product in the given URL.
-
-### GET /trackers/{userId}
-
-This endpoint will return all the trackers that have been created by the user with the given ID.
-
-### GET /trackers/{productId}
-
-This endpoint will return all the trackers that have been created for the product with the given ID.
-
-### POST /trackers/{productId}
-
-This endpoint will start tracking the price of the product with the given ID.
-
-### GET /scans/{trackerId}
-
-This endpoint will return all the scans that have been made for the tracker with the given ID.
-
-
-
+4. Lancer le serveur avec `npm run dev`
+5. Le serveur est accessible à l'adresse `http://localhost:3000`
