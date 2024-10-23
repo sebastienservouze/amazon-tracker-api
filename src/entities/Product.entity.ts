@@ -35,7 +35,7 @@ export class Product extends MetadataEntity {
     @OneToMany(() => PriceChange, priceChange => priceChange.product, {cascade: true})
     priceChanges!: PriceChange[];
 
-    @ManyToMany(() => Product)
+    @ManyToMany(() => Product, product => product.variants)
     @JoinTable()
-    variants?: Partial<Product>[];
+    variants?: Product[];
 }

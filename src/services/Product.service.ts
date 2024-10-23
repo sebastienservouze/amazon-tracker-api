@@ -18,7 +18,10 @@ export class ProductService extends CrudService<Product> {
 
     async scrap(url: string): Promise<Partial<Product>> {
         const amazonId = url.split('/')[5];
-        const existingProduct = await this.repository?.findOne({where: {amazonId}});
+        const existingProduct = await this.repository?.findOne({
+            where: {amazonId},
+            relations: ['variants']
+        });
 
         if (existingProduct) {
             logger.info(`Product ${existingProduct.name} already exists`);

@@ -40,7 +40,7 @@ export class ProductScrapper extends Scrapper<Partial<Product>> {
             averagePrice: productPrice,
             lowestPrice: productPrice,
             highestPrice: productPrice,
-            variants: variants
+            variants: variants as Product[]
         };
     }
 
